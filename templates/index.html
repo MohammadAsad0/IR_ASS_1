@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Boolean Retrieval Model</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <style>
+        .tooltip {
+            position: relative;
+            border-bottom: 1px dotted black;
+            padding: 15px;
+            margin-left: 40px;
+            cursor: pointer;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 160px;
+            background-color: grey;
+            color: #fff;
+            text-align: start;
+            border-radius: 6px;
+            padding: 5px;
+
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            top: 100%;
+            margin-left: -80px;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+    </style>
+    <body style="background-color: black; color: white;">
+        <h1 style="border: 1px solid white; border-radius: 20px; padding: 15px; margin: 30px;">Boolean Search</h1>
+
+        
+        
+        <form method="POST" action="/" style="display:flex; margin:auto; width:80%;">
+            <input style="width:80%; background-color: black; color: white; padding: 15px; border-radius: 20px; border: 2px solid white;" type="text" id="name" name="name" placeholder="e.g. Cricket AND captain" required>
+            <input style="background-color: black; color: white; border-radius: 20px; padding: 15px; margin-left: 10px; border: 2px solid white; cursor: pointer;" type="submit" value="Search">
+            <div class="tooltip">Hint
+                <span class="tooltiptext">Enter the query with operators in-between the words. (AND, OR, NOT)</span>
+            </div>
+        </form>
+
+        {% if result %}
+            <div style="margin: 40px auto; display: block; width: 90%;">
+            <h2>Documents found</h2>
+                {% for name in result %}
+                    <p style="margin-bottom: 1px; border: 1px dotted white; padding: 10px;">{{ name }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if message and message != "200" %}
+            <p style="margin: 30px; border: 1px dotted red; padding: 10px; color: grey">{{ message }}</p>
+        {% endif %}
+
+        <h1 style="border: 1px solid white; border-radius: 20px; padding: 15px; margin: 120px 30px 30px;">Phrase Query Search</h1>
+
+        <form method="POST" action="/p_search" style="display:flex; margin:auto; width:80%;">
+            <input style="width:80%; background-color: black; color: white; padding: 15px; border-radius: 20px; border: 2px solid white;" type="text" id="name" name="name" placeholder="e.g. beautiful drive" required>
+            <input style="background-color: black; color: white; border-radius: 20px; padding: 15px; margin-left: 10px; border: 2px solid white; cursor: pointer;" type="submit" value="Search">
+            <div class="tooltip">Hint
+                <span class="tooltiptext">Enter the phrasal query that appears in the same sequence</span>
+            </div>
+        </form>
+
+        {% if p_result %}
+            <div style="margin: 40px auto; display: block; width: 90%;">
+            <h2>Documents found</h2>
+                {% for name in p_result %}
+                    <p style="margin-bottom: 1px; border: 1px dotted white; padding: 10px;">{{ name }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if p_message and p_message != "200" %}
+            <p style="margin: 30px; border: 1px dotted red; padding: 10px; color: grey">{{ p_message }}</p>
+        {% endif %}
+        <div style="margin-bottom:60px;"></div>
+    </body>
+</html>
