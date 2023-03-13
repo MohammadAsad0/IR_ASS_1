@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from ir_boolean_model import search, PhraseSearch
+from ir_boolean_model import search, PhraseSearch, ProximitySearch
 
 app = Flask(__name__)
 
@@ -18,8 +18,8 @@ def index():
         return render_template('index.html', result=None, message="200")
 
 
-@app.route('/p_search', methods=['POST'])
-def p_search():
+@app.route('/phrase_search', methods=['POST'])
+def phrase_search():
     name = request.form['name']
     result = PhraseSearch(name)
     
@@ -31,8 +31,26 @@ def p_search():
     return render_template('index.html', p_result=result, p_message=message)
     
 
-@app.route('/p_search', methods=['GET'])
-def get_p():
+@app.route('/phrase_search', methods=['GET'])
+def redirect_phrase():
+    return redirect(url_for('index'))
+
+
+@app.route('/proximity_search', methods=['POST'])
+def proximity_search():
+    name = request.form['name']
+    result = ProximitySearch(name)
+    
+    if not result:
+        message = "No Documents found"
+    else:
+        message = "200"
+        
+    return render_template('index.html', prox_result=result, prox_message=message)
+    
+
+@app.route('/prox_search', methods=['GET'])
+def redirect_proximity():
     return redirect(url_for('index'))
 
 

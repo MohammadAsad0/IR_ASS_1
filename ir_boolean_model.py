@@ -245,6 +245,64 @@ def PhraseSearch(query):
   return sorted(final_result)
 
 
+def ProximitySearch(query):
+  # lower case
+  query = query.lower()
+
+  # splitting into list of words
+  query_terms = query.split()
+
+  # it will contain resulting inverted index for each query term
+  result = []
+  k_set = []
+
+  # filling result variable
+  for index, q_term in enumerate(query_terms):
+    
+    if index % 2 == 0:
+      stem_term = stemmer.stem(q_term)
+
+      try:
+        result.append(pos_inverted_index[stem_term][1])
+      except:
+        result.append({})
+    
+    else:
+      try:
+        k_set.append(int(q_term[1:]))
+      except:
+        return []
+      
+  # this will contain common doc ids for each query term
+  common_docs = result[0].keys()
+
+  # taking intersection to get common documents
+  for inv_index in result[1:]:
+    common_docs = set(common_docs).intersection(set(inv_index.keys()))
+
+  # it will contain final resulting doc ids
+  final_result = []
+
+  for doc in common_docs:
+    lst = result[0][doc]
+    i = 0
+
+    for query_i in range(1, len(result)):
+
+      temp_lst = [x - k_set[i] for x in result[query_i][doc]]
+
+      lst = set(lst).intersection(set(temp_lst))
+
+      i += 1
+    
+    if lst:
+      final_result.append(doc)
+
+  return sorted(final_result)
+      
+
+
+
 def StoreIndexInFile(path, index):
   if index:
     byte_stream = pickle.dumps(index)

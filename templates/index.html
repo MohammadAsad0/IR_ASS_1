@@ -62,8 +62,8 @@
 
         <h1 style="border: 1px solid white; border-radius: 20px; padding: 15px; margin: 120px 30px 30px;">Phrase Query Search</h1>
 
-        <form method="POST" action="/p_search" style="display:flex; margin:auto; width:80%;">
-            <input style="width:80%; background-color: black; color: white; padding: 15px; border-radius: 20px; border: 2px solid white;" type="text" id="name" name="name" placeholder="e.g. beautiful drive" required>
+        <form method="POST" action="/phrase_search" style="display:flex; margin:auto; width:80%;">
+            <input style="width:80%; background-color: black; color: white; padding: 15px; border-radius: 20px; border: 2px solid white;" type="text" id="name" name="name" placeholder="e.g. cricket bat" required>
             <input style="background-color: black; color: white; border-radius: 20px; padding: 15px; margin-left: 10px; border: 2px solid white; cursor: pointer;" type="submit" value="Search">
             <div class="tooltip">Hint
                 <span class="tooltiptext">Enter the phrasal query that appears in the same sequence</span>
@@ -83,5 +83,30 @@
             <p style="margin: 30px; border: 1px dotted red; padding: 10px; color: grey">{{ p_message }}</p>
         {% endif %}
         <div style="margin-bottom:60px;"></div>
-    </body>
+
+
+        <h1 style="border: 1px solid white; border-radius: 20px; padding: 15px; margin: 120px 30px 30px;">Proximity Query Search</h1>
+
+        <form method="POST" action="/proximity_search" style="display:flex; margin:auto; width:80%;">
+            <input style="width:80%; background-color: black; color: white; padding: 15px; border-radius: 20px; border: 2px solid white;" type="text" id="name" name="name" placeholder="e.g. cricket /2 bat" required>
+            <input style="background-color: black; color: white; border-radius: 20px; padding: 15px; margin-left: 10px; border: 2px solid white; cursor: pointer;" type="submit" value="Search">
+            <div class="tooltip">Hint
+                <span class="tooltiptext">Enter the proximity query such that between every word there is a /k string where k is number of gap between the words</span>
+            </div>
+        </form>
+
+        {% if prox_result %}
+            <div style="margin: 40px auto; display: block; width: 90%;">
+            <h2>Documents found</h2>
+                {% for name in prox_result %}
+                    <p style="margin-bottom: 1px; border: 1px dotted white; padding: 10px;">{{ name }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if prox_message and prox_message != "200" %}
+            <p style="margin: 30px; border: 1px dotted red; padding: 10px; color: grey">{{ prox_message }}</p>
+        {% endif %}
+        <div style="margin-bottom:60px;"></div>
+    </body> 
 </html>
